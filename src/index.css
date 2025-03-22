@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+	color: white;
+	font-family: "Exo";
+}
+
+.no-scrollbar {
+	scrollbar-width: none; /* For Firefox */
+	-ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+	display: none; /* For WebKit-based browsers (Chrome, Safari, etc.) */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+	width: 4px;
+	height: 4px;
+	background-color: #f5f5f5;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background-color: #b8bed9;
+	border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background-color: #c7c7cd;
+}
+
+.center {
+	@apply flex flex-col justify-center items-center;
+}
+
+.dbg {
+	@apply border border-red-500;
+}
+
+.dbg2 {
+	@apply border border-green-500;
+}
+
+@layer components {
+	.btn {
+		@apply flex flex-row justify-start items-center space-x-2  relative  px-2 lg:px-6 py-3 font-semibold text-white lg:text-lg rounded-lg bg-gradient-to-r from-[#8228FF] to-[#4E1899]  border-[0.5px] border-transparent before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-r before:from-[#FFFFFF] before:via-[#12061A] before:to-[#FFFFFF] before:opacity-20 before:pointer-events-none hover:scale-[1.02];
+	}
+
+	.bg-border-gradient {
+		position: relative;
+		display: inline-block;
+	}
+
+	.bg-border-gradient::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		padding: 1px; /* Adjust border thickness */
+		background: linear-gradient(90deg, #ffffff, #000000, #ffffff);
+		border-radius: 15px; /* Adjust for rounded corners */
+		-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+		mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+		-webkit-mask-composite: destination-out;
+		mask-composite: exclude;
+	}
+}
