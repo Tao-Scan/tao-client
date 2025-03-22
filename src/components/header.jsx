@@ -7,13 +7,17 @@ export default function Header() {
 			<div className="flex justify-between md:justify-end items-center w-[90%]  ">
 				<img src={Logo} alt="logo" className="-translate-x-2 md:hidden " />
 
-				<div className="flex justify-center items-center space-x-2 group">
+				<div className="flex justify-center items-center space-x-2 group relative">
 					<div className="w-[30px] h-[30px] overflow-clip rounded-full border border-white/20">
 						<img src={`https://robohash.org/hello.png`} alt="Avatar" className="rounded-full w-[30px] h-[30px]" />
 					</div>
 					<span> John Doe</span>
 
-					<GoChevronDown className="text-2xl group-hover:rotate-90 transform duration-500" />
+					<GoChevronDown className="text-2xl group-hover:rotate-180 transform duration-500" />
+
+					<div className="absolute top-0 group-hover:top-[102%] right-0 hover:cursor-pointer  bg-black text-white z-20 py-1 opacity-0 text-sm group-hover:opacity-100 duration-300 transition-all lg:text-base ">
+						Log out
+					</div>
 				</div>
 			</div>
 		</div>
