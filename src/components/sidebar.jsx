@@ -37,14 +37,14 @@ export function BottomBar() {
 		<aside className="fixed inset-x-0 bottom-0  w-full  border-t border-white/10 center  md:hidden z-20 bg-[#030105] ">
 			<div className="flex-row justify-between items-center    flex w-[90%]">
 				<div title="Home" className="p-3 hover:bg-[#8228FF26]/10 rounded-[15px] hover:cursor-pointer group">
-					<RiHome5Line className="text-3xl text-white/70 group-hover:text-white" />
+					<RiHome5Line className="text-3xl text-white group-hover:text-white" />
 				</div>
 
-				<div title="Coming Soon" className="p-1 opacity-40  cursor-not-allowed">
+				<div title="Coming Soon" className="p-1 opacity-20  cursor-not-allowed">
 					<GoShieldLock className="text-3xl text-white" />
 				</div>
 
-				<div title="Coming Soon" className="p-1 opacity-40  cursor-not-allowed">
+				<div title="Coming Soon" className="p-1 opacity-20  cursor-not-allowed">
 					<IoMdPeople className="text-3xl text-white" />
 				</div>
 			</div>

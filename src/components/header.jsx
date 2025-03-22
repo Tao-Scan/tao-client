@@ -15,7 +15,7 @@ export default function Header() {
 
 					<GoChevronDown className="text-2xl group-hover:rotate-180 transform duration-500" />
 
-					<div className="absolute top-0 group-hover:top-[102%] right-0 hover:cursor-pointer  bg-black text-white z-20 py-1 opacity-0 text-sm group-hover:opacity-100 duration-300 transition-all lg:text-base ">
+					<div className="absolute top-0 group-hover:top-[105%] backdrop-blur-xl right-0 hover:cursor-pointer  bg-black px-4 py-1 rounded-[15px] text-white z-20  opacity-0 text-sm group-hover:opacity-100 duration-300 transition-all  border border-white/5 hover:border-white/10">
 						Log out
 					</div>
 				</div>
