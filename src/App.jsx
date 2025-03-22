@@ -1,4 +1,4 @@
-import Sidebar from "./components/sidebar";
+import { BottomBar, Sidebar } from "./components/sidebar";
 import Header from "./components/header";
 import YingImage from "@assets/ying.png";
 import YangImage from "@assets/yang.png";
@@ -10,13 +10,17 @@ import { BiSend } from "react-icons/bi";
 
 function App() {
 	return (
-		<div className="  bg-[#030105]  w-full h-screen center overflow-auto">
+		<div className="  bg-[#030105]  w-full h-screen center overflow-auto md:overflow-clip">
 			<Sidebar />
 
-			<div className="lg:w-[94%] lg:ml-[6%]  h-screen py-8 px-8 flex flex-col justify-start items-center space-y-12 lg:space-y-4 relative ">
+			<BottomBar />
+
+			<div className="md:w-[90%] md:ml-[10%] lg:w-[94%] lg:ml-[6%]  h-screen py-8 px-0 flex flex-col justify-start items-center space-y-12 md:space-y-4 relative">
 				<Header />
 
-				<div className="max-w-6xl text-center space-y-8 z-10">
+				<div className="pt-0 md:pt-8  lg:pt-16"></div>
+
+				<div className="w-[90%]   max-w-6xl text-center space-y-8 z-10">
 					<h1
 						style={{
 							fontFamily: "Kode mono",
@@ -31,7 +35,7 @@ function App() {
 					<div className="hidden md:flex flex-row justify-between items-center whitespace-nowrap overflow-x-auto pb-4  no-scrollbar space-x-8 ">
 						{/* 1 */}
 
-						<div className=" bg-[#8228FF26]   border-white/5 backdrop-blur-lg rounded-[15px] p-5 w-full space-y-4 text-left shadow-lg shadow-black/50">
+						<div className=" bg-[#8228FF26]   border-white/5 backdrop-blur-md rounded-[15px] p-5 w-full space-y-4 text-left shadow-lg shadow-black/50">
 							<div className="bg-[#8228FF] text-white text-sm rounded-[100px] w-max px-4 py-1 shadow capitalize">
 								Explore blockchains
 							</div>
@@ -74,7 +78,7 @@ function App() {
 
 				{/* Metrics  */}
 
-				<div className="max-w-6xl pt-4 space-y-8 lg:space-y-12 w-full z-10 ">
+				<div className="w-[90%] max-w-6xl pt-4  space-y-8 lg:space-y-12  z-10 pb-16 ">
 					<h2
 						style={{
 							fontFamily: "Kode Mono",
@@ -88,7 +92,7 @@ function App() {
 					<div className="flex flex-col  lg:flex-row justify-center space-y-6 lg:space-y-0 lg:justify-between items-center whitespace-nowrap overflow-x-auto pb-8  no-scrollbar lg:space-x-8 z-10">
 						{/* 1 */}
 
-						<div className="bg-border-gradient  backdrop-blur-lg rounded-[15px] p-5 w-full space-y-4 text-left shadow-lg shadow-black/50 min-w-[336px]">
+						<div className="bg-border-gradient  backdrop-blur-lg rounded-[15px] p-5 w-full space-y-4 text-left shadow-lg shadow-black/50  ">
 							<div className="flex justify-start items-center space-x-4">
 								<img src={BitcoinImage} alt="Bitcoin" className="" />
 
@@ -122,7 +126,7 @@ function App() {
 
 						{/* 2 */}
 
-						<div className="bg-border-gradient  backdrop-blur-lg rounded-[15px] p-5 w-full space-y-4 text-left shadow-lg shadow-black/50 min-w-[336px]">
+						<div className="bg-border-gradient  backdrop-blur-lg rounded-[15px] p-5 w-full space-y-4 text-left shadow-lg shadow-black/50  ">
 							<div className="flex justify-start items-center space-x-4">
 								<img src={EthereumImage} alt="Bitcoin" className="" />
 
@@ -156,7 +160,7 @@ function App() {
 
 						{/* 3 */}
 
-						<div className="bg-border-gradient  backdrop-blur-lg rounded-[15px] p-5 w-full space-y-4 text-left shadow-lg shadow-black/50 min-w-[336px]">
+						<div className="bg-border-gradient  backdrop-blur-lg rounded-[15px] p-5 w-full space-y-4 text-left shadow-lg shadow-black/50  ">
 							<div className="flex justify-start items-center space-x-4">
 								<img src={SmartchainImage} alt="Bitcoin" className="" />
 
@@ -190,15 +194,18 @@ function App() {
 					</div>
 				</div>
 
+				<img src={YingImage} alt="" className="absolute bottom-0  w-full h-full hidden lg:block" />
+				<img src={YangImage} alt="" className="absolute bottom-0 w-full h-full hidden lg:block" />
+
 				<img
 					src={YingImage}
 					alt=""
-					className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 lg:bottom-0 w-full "
+					className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 lg:hidden  w-full h-full "
 				/>
 				<img
 					src={YangImage}
 					alt=""
-					className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 lg:bottom-0 w-full"
+					className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 lg:hidden  w-full h-full"
 				/>
 			</div>
 		</div>
