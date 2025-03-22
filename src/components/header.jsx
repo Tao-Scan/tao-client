@@ -3,7 +3,7 @@ import Logo from "@assets/logo.png";
 
 export default function Header() {
 	return (
-		<div className="fixed   top-0 inset-x-0  z-20 center backdrop-blur-md py-2 md:py-4">
+		<div className="fixed   top-0 inset-x-0  z-20 center backdrop-blur-xl py-2 md:py-4">
 			<div className="flex justify-between md:justify-end items-center w-[90%]  ">
 				<img src={Logo} alt="logo" className="-translate-x-2 md:hidden " />
 
