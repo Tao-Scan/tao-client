@@ -6,10 +6,11 @@ const config = {
 		getRegistrationCode: "/register/otp",
 		startLogin: "/login/start",
 		completeLogin: "/login/complete",
+		getCurrentUser: "/users/me",
 	},
 
 	storage: {
-		authContextKey: "TAO_",
+		authContextKey: "TAO_AUTH",
 		surviveBrowserClose: true,
 	},
 };

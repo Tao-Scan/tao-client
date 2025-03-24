@@ -3,8 +3,25 @@ import Header from "../components/header";
 import YingImage from "@assets/ying.png";
 import Popups from "../components/popups";
 import MessageBox from "../components/messagebox";
+import useAuth from "../libs/hooks/useauth";
+import { Redirect } from "wouter";
+import Spinner from "../components/spinner";
 
 export default function Chat() {
+	const { authenticated, pending } = useAuth();
+
+	if (pending) {
+		return (
+			<div className="  bg-[#030105]  w-full h-screen center overflow-auto custom-scrollbar">
+				<Spinner />
+			</div>
+		);
+	}
+
+	if (!authenticated) {
+		return <Redirect to="/" />;
+	}
+
 	return (
 		<div className="  bg-[#030105]  w-full h-screen center overflow-auto custom-scrollbar">
 			<Popups />
