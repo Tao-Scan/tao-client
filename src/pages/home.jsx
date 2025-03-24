@@ -6,10 +6,14 @@ import BitcoinImage from "@assets/bitcoin.png";
 import EthereumImage from "@assets/ethereum.png";
 import SmartchainImage from "@assets/smartchain.png";
 import { BiSend } from "react-icons/bi";
+import Popups from "../components/popups";
+import useAppStore from "../libs/store";
 
 export default function Home() {
+	const openSignUp = useAppStore((state) => state.setShowSignUp);
 	return (
 		<div className="  bg-[#030105]  w-full h-screen center overflow-auto custom-scrollbar">
+			<Popups />
 			<Sidebar />
 
 			<BottomBar />
@@ -64,10 +68,11 @@ export default function Home() {
 					{/* message box  */}
 
 					<div className="w-full  flex flex-row justify-between items-center space-x-4 rounded-[15px]  px-2 lg:px-4 backdrop-blur-lg bg-border-gradient">
-						<textarea className="w-full pl-4 pr-4 pt-4 lg:pt-6 lg:pb-2 resize-none bg-transparent no-scrollbar  focus:outline-none text-white/70 lg:text-lg  z-10 ">
-							Talk to Tao
-						</textarea>
-						<button className=" btn self-center">
+						<textarea
+							placeholder="Talk to Tao"
+							className="w-full pl-4 pr-4 pt-4 lg:pt-6 lg:pb-2 resize-none bg-transparent no-scrollbar  focus:outline-none text-white/70 lg:text-lg  z-10 "
+						></textarea>
+						<button onClick={openSignUp} className=" btn self-center">
 							<span className="hidden lg:inline-block"> Send </span>
 
 							<BiSend className="text-2xl lg:text-3xl" />

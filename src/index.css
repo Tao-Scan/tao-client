@@ -45,7 +45,7 @@ body {
 
 @layer components {
 	.btn {
-		@apply flex flex-row justify-start items-center space-x-2  relative  px-2 lg:px-6 py-3 font-semibold text-white lg:text-lg rounded-lg bg-gradient-to-r from-[#8228FF] to-[#4E1899]  border-[0.5px] border-transparent before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-r before:from-[#FFFFFF] before:via-[#12061A] before:to-[#FFFFFF] before:opacity-20 before:pointer-events-none hover:scale-[1.02];
+		@apply flex flex-row justify-start items-center space-x-2  relative  px-2 lg:px-6 py-3 font-semibold text-white lg:text-lg rounded-lg bg-gradient-to-tr      from-[#8228FF] to-[#4E1899]  border-[0.5px] border-transparent before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-tr before:from-[#FFFFFF] before:via-[#12061A] before:to-[#FFFFFF] before:opacity-20 before:pointer-events-none hover:scale-[1.02] disabled:pointer-events-none disabled:opacity-40;
 	}
 
 	.bg-border-gradient {
