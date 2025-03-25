@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import useAppStore from "../libs/store";
 import useCountdownTimer from "../libs/hooks/usecountdown";
 import { useSnackbar } from "../libs/hooks/usesnack";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFetcher } from "../libs/fetcher";
 import config from "../libs/config";
 import * as Yup from "yup";
@@ -21,6 +21,7 @@ const validationSchema = Yup.object().shape({
 export default function SignInPopup() {
 	const snack = useSnackbar();
 
+	const queryClient = useQueryClient();
 	const intentTokenRef = useRef(null);
 
 	const { countEnded, remainingTime, setFutureTimestamp } = useCountdownTimer(Date.now());
@@ -73,6 +74,8 @@ export default function SignInPopup() {
 	useEffect(() => {
 		if (isSuccess) {
 			saveAuthContext(data);
+			queryClient.invalidateQueries({ queryKey: [config.endpoints.getCurrentUser] });
+			window.dispatchEvent(new Event("authContextChanged"));
 			snack({
 				message: "Logged In",
 				variant: "success",

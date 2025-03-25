@@ -3,7 +3,7 @@ import Overlay from "./overlay";
 import useOnClickOutside from "use-onclickoutside";
 import { useEffect, useRef } from "react";
 import useAppStore from "../libs/store";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import config from "../libs/config";
 import { createFetcher } from "../libs/fetcher";
 import { useSnackbar } from "../libs/hooks/usesnack";
@@ -26,6 +26,8 @@ const validationSchema = Yup.object().shape({
 export default function SignUpPopup() {
 	const navigate = useLocation()[1];
 	const snack = useSnackbar();
+
+	const queryClient = useQueryClient();
 
 	const intentTokenRef = useRef(null);
 
@@ -95,6 +97,10 @@ export default function SignUpPopup() {
 	useEffect(() => {
 		if (isSuccess) {
 			saveAuthContext(data);
+
+			queryClient.invalidateQueries({ queryKey: [config.endpoints.getCurrentUser] });
+			window.dispatchEvent(new Event("authContextChanged"));
+
 			snack({
 				message: "Account created",
 				variant: "success",

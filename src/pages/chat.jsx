@@ -6,11 +6,71 @@ import MessageBox from "../components/messagebox";
 import useAuth from "../libs/hooks/useauth";
 import { Redirect } from "wouter";
 import Spinner from "../components/spinner";
+import ChatContainer from "../components/chatcontainer";
+import initSocket from "../libs/socket";
+import { useEffect, useState } from "react";
 
 export default function Chat() {
-	const { authenticated, pending } = useAuth();
+	const { authenticated, pending, authContext, failed } = useAuth();
 
-	if (pending) {
+	const [sentMsgs, setSentMsgs] = useState([]);
+	const [processing, setProcessing] = useState(false);
+
+	const socket = initSocket({
+		accessToken: authContext?.accessToken,
+	});
+
+	function pushNewSentMsg(msg) {
+		setSentMsgs(sentMsgs.concat(msg));
+	}
+
+	function updateSentMsg(cid, update) {
+		setSentMsgs((prevMsgs) => prevMsgs.map((msg) => (msg.cid === cid ? { ...msg, ...update } : msg)));
+	}
+
+	// Register Events
+	useEffect(() => {
+		if (!socket) {
+			console.error("Socket is undefined.");
+			return;
+		}
+
+		const eventHandlers = {
+			connect: () => console.log("Socket connected."),
+			disconnect: (reason) => console.log("Socket disconnected: ", reason),
+			reconnect: () => console.log("Reconnecting..."),
+			error: (err) => console.log("Socket Error: ", err),
+			processqueryerror: (data) => console.log(data),
+			processingquery: (data) => console.log(data),
+			queryreply: (data) => {
+				updateSentMsg(data.cid, {
+					reply: data.message,
+				});
+
+				setProcessing(false);
+			},
+			querycalledtool: (data) => console.log(data),
+		};
+
+		// Log all received events for debugging
+		socket.onAny((event, ...args) => console.log("Received event:", event, args));
+
+		// Register event handlers
+		Object.entries(eventHandlers).forEach(([event, handler]) => socket.on(event, handler));
+
+		if (authenticated && !socket.active) {
+			console.log("Attempting to connect to socket...");
+			socket.connect();
+		} else if (!authenticated) {
+			console.log("No auth, will not connect to socket");
+		}
+
+		return () => {
+			Object.entries(eventHandlers).forEach(([event, handler]) => socket.off(event, handler));
+		};
+	}, [authenticated]);
+
+	if (pending && !failed) {
 		return (
 			<div className="  bg-[#030105]  w-full h-screen center overflow-auto custom-scrollbar">
 				<Spinner />
@@ -32,10 +92,18 @@ export default function Chat() {
 
 				{/* Main Area  */}
 
-				<div className="w-[90%] max-w-7xl text-center space-y-8 z-10  h-full relative ">
+				<div className="w-[90%] max-w-5xl text-center space-y-4 z-10 pb-2 h-full  flex flex-col justify-end items-center">
+					<ChatContainer auth={authContext} sentMsgs={sentMsgs} processing={processing} setProcessing={setProcessing} />
+
 					{/* message box  */}
 
-					<MessageBox />
+					<MessageBox
+						ready={true}
+						socket={socket}
+						pushNewSentMsg={pushNewSentMsg}
+						processing={processing}
+						setProcessing={setProcessing}
+					/>
 				</div>
 			</div>
 			<img src={YingImage} alt="" className="absolute bottom-0  w-full h-full hidden lg:block blur-2xl opacity-60" />
