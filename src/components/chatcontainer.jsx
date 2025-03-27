@@ -4,7 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import config from "../libs/config";
 import { createFetcher } from "../libs/fetcher";
 
-export default function ChatContainer({ auth, sentMsgs, processing, setProcessing }) {
+export default function ChatContainer({ auth, sentMsgs, status, setProcessing }) {
 	const lastMessageRef = useRef();
 
 	const [fetchParams, setFetchParams] = useState({
@@ -67,7 +67,7 @@ export default function ChatContainer({ auth, sentMsgs, processing, setProcessin
 	}, [sentMsgs, data]);
 
 	return (
-		<div className=" pt-4 space-y-10 overflow-y-auto no-scrollbar h-full w-full">
+		<div className=" pt-4  space-y-10 overflow-y-auto no-scrollbar h-full w-full">
 			{data &&
 				data.pages.map((page, i) => {
 					return (
@@ -94,13 +94,15 @@ export default function ChatContainer({ auth, sentMsgs, processing, setProcessin
 											className="flex flex-col justify-center items-start  space-y-8 w-full text-left leading-8 font-medium "
 										>
 											<UserMessage content={msg.query} />
+
+											{msg.reply && <AssistantMessage content={msg.reply} />}
 										</div>
 									);
 								})}
 
-							{processing && <TypingIndicator />}
+							<TypingIndicator {...status} />
 
-							<div ref={lastMessageRef}></div>
+							<div className="pb-32" ref={lastMessageRef}></div>
 						</Fragment>
 					);
 				})}
@@ -135,7 +137,7 @@ function AssistantMessage({ content }) {
 	);
 }
 
-function TypingIndicator() {
+function TypingIndicator({ processing, calledTool }) {
 	const [showCursor, setShowCursor] = useState(true);
 
 	useEffect(() => {
@@ -146,14 +148,22 @@ function TypingIndicator() {
 		return () => clearInterval(interval);
 	}, []);
 
+	// console.log("Processing: ", processing);
+
+	if (!processing) return null;
+
 	return (
 		<div className="self-start">
 			<div className="flex items-center space-x-2 font-mono text-lg">
 				<span className="w-3 h-3 bg-black dark:bg-white rounded-full animate-pulse"></span>
 
-				<span
-					className={`w-2 rounded-sm h-5 bg-black dark:bg-white ${showCursor ? "opacity-100" : "opacity-0"}`}
-				></span>
+				{calledTool ? (
+					<span className="text-gray-400 italic text-sm animate-pulse"> looking up sources... </span>
+				) : (
+					<span
+						className={`w-2 rounded-sm h-5 bg-black dark:bg-white ${showCursor ? "opacity-100" : "opacity-0"}`}
+					></span>
+				)}
 			</div>
 		</div>
 	);

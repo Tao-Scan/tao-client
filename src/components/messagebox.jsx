@@ -8,7 +8,7 @@ export default function MessageBox({ ready, socket, pushNewSentMsg, processing, 
 
 	const [message, setMessage] = useState("");
 
-	ready = ready && !!message && socket.connected;
+	ready = ready && !!message && socket?.connected;
 
 	// console.log(socket);
 
@@ -67,6 +67,7 @@ export default function MessageBox({ ready, socket, pushNewSentMsg, processing, 
 				placeholder="Talk to Tao"
 				ref={inputRef}
 				cols={1}
+				autoFocus
 				value={message}
 				onChange={onMessageChange}
 				className="w-full pl-4 pr-4 py-4 lg:pt-6 lg:pb-4 resize-none bg-transparent no-scrollbar  focus:outline-none placeholder:text-white/40 text-white lg:text-lg  z-10 "

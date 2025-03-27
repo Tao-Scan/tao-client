@@ -8,17 +8,20 @@ import { Redirect } from "wouter";
 import Spinner from "../components/spinner";
 import ChatContainer from "../components/chatcontainer";
 import initSocket from "../libs/socket";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Chat() {
 	const { authenticated, pending, authContext, failed } = useAuth();
 
 	const [sentMsgs, setSentMsgs] = useState([]);
-	const [processing, setProcessing] = useState(false);
-
-	const socket = initSocket({
-		accessToken: authContext?.accessToken,
+	const [status, setStatus] = useState({
+		processing: false,
+		calledTool: false,
+		activeCid: null,
+		processingQuery: false,
 	});
+
+	const socketRef = useRef(null);
 
 	function pushNewSentMsg(msg) {
 		setSentMsgs(sentMsgs.concat(msg));
@@ -27,6 +30,21 @@ export default function Chat() {
 	function updateSentMsg(cid, update) {
 		setSentMsgs((prevMsgs) => prevMsgs.map((msg) => (msg.cid === cid ? { ...msg, ...update } : msg)));
 	}
+
+	useEffect(() => {
+		if (!socketRef.current) {
+			socketRef.current = initSocket({
+				accessToken: authContext?.accessToken,
+			});
+		}
+
+		return () => {
+			socketRef.current?.disconnect(); // Cleanup on unmount
+			socketRef.current = null;
+		};
+	}, [authContext?.accessToken]);
+
+	const socket = socketRef?.current;
 
 	// Register Events
 	useEffect(() => {
@@ -40,20 +58,29 @@ export default function Chat() {
 			disconnect: (reason) => console.log("Socket disconnected: ", reason),
 			reconnect: () => console.log("Reconnecting..."),
 			error: (err) => console.log("Socket Error: ", err),
-			processqueryerror: (data) => console.log(data),
-			processingquery: (data) => console.log(data),
+			processqueryerror: (data) => {
+				updateSentMsg(data.cid, {
+					error: true,
+					errorMessage: data.message,
+				});
+			},
+			processingquery: (data) => {
+				setStatus((prev) => ({ ...prev, processingQuery: true, activeCid: data.cid }));
+			},
 			queryreply: (data) => {
 				updateSentMsg(data.cid, {
 					reply: data.message,
 				});
 
-				setProcessing(false);
+				setStatus((prev) => ({ ...prev, processing: false, processingQuery: false, calledTool: false }));
 			},
-			querycalledtool: (data) => console.log(data),
+			querycalledtool: (data) => {
+				setStatus((prev) => ({ ...prev, calledTool: true }));
+			},
 		};
 
 		// Log all received events for debugging
-		socket.onAny((event, ...args) => console.log("Received event:", event, args));
+		// socket.onAny((event, ...args) => console.log("Received event:", event, args));
 
 		// Register event handlers
 		Object.entries(eventHandlers).forEach(([event, handler]) => socket.on(event, handler));
@@ -93,7 +120,12 @@ export default function Chat() {
 				{/* Main Area  */}
 
 				<div className="w-[90%] max-w-5xl text-center space-y-4 z-10 pb-2 h-full  flex flex-col justify-end items-center">
-					<ChatContainer auth={authContext} sentMsgs={sentMsgs} processing={processing} setProcessing={setProcessing} />
+					<ChatContainer
+						auth={authContext}
+						sentMsgs={sentMsgs}
+						status={status}
+						setProcessing={(v) => setStatus((prev) => ({ ...prev, processing: v }))}
+					/>
 
 					{/* message box  */}
 
@@ -101,8 +133,8 @@ export default function Chat() {
 						ready={true}
 						socket={socket}
 						pushNewSentMsg={pushNewSentMsg}
-						processing={processing}
-						setProcessing={setProcessing}
+						processing={status.processing}
+						setProcessing={(v) => setStatus((prev) => ({ ...prev, processing: v }))}
 					/>
 				</div>
 			</div>
